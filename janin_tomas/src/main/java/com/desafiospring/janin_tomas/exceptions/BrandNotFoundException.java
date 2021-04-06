@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class BrandNotFoundException extends Exception {
-    private final String title = "Categoría no encontrada";
+    private final String title = "Marca no encontrada";
 
     public BrandNotFoundException(String message) {
         super(message);

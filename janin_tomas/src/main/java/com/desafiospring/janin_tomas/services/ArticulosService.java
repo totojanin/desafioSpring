@@ -4,6 +4,7 @@ import com.desafiospring.janin_tomas.dtos.ArticuloDTO;
 import com.desafiospring.janin_tomas.exceptions.*;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 public interface ArticulosService {
     List<ArticuloDTO> findArticuloByFilters(String category, String shipping, String productName, String brand) throws MaxFiltersException, CategoryNotFoundException, ShippingNotFoundException, InvalidShippingException, ProductNameNotFoundException, BrandNotFoundException;

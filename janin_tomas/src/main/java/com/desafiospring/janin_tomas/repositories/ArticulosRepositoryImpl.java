@@ -1,6 +1,7 @@
 package com.desafiospring.janin_tomas.repositories;
 
 import com.desafiospring.janin_tomas.dtos.ArticuloDTO;
+import lombok.Data;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 
@@ -11,18 +12,26 @@ import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
+@Data
 public class ArticulosRepositoryImpl implements ArticulosRepository {
+    private List<ArticuloDTO> articulos;
+
     @Override
     public List<ArticuloDTO> findArticulos() {
-        List<ArticuloDTO> articulos = loadDataBase();
+        if (articulos == null) {
+            List<ArticuloDTO> db = loadDataBase();
 
-        List<ArticuloDTO> result = new ArrayList<>();
+            articulos = new ArrayList<>();
 
-        if (articulos != null) {
-            result = articulos;
+            if (db != null) {
+                articulos = db;
+            }
+
+            return articulos;
         }
-
-        return result;
+        else {
+            return articulos;
+        }
     }
 
     private List<ArticuloDTO> loadDataBase() {

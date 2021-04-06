@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class ArticulosServiceImpl implements ArticulosService {
@@ -26,7 +27,7 @@ public class ArticulosServiceImpl implements ArticulosService {
             articulos = findArticuloByProductName(articulos, productName);
             articulos = findArticuloByBrand(articulos, brand);
 
-            return articulos;
+            return articulos.stream().collect(Collectors.toList());
         }
         else {
             throw new MaxFiltersException("No puede enviar más de dos filtros a la vez");
@@ -39,13 +40,13 @@ public class ArticulosServiceImpl implements ArticulosService {
             return articulos;
 
         List<ArticuloDTO> response = articulos.stream()
-                .filter(a -> a.getCategory().equals(category))
+                .filter(a -> a.getCategory().equalsIgnoreCase(category))
                 .collect(Collectors.toList());
 
         if (!response.isEmpty())
             return response;
         else
-            throw new CategoryNotFoundException("La categoría ingresada no existe");
+            throw new CategoryNotFoundException("La categoría o la combinación ingresada no existe");
     }
 
     @Override
@@ -76,13 +77,13 @@ public class ArticulosServiceImpl implements ArticulosService {
             return articulos;
 
         List<ArticuloDTO> response = articulos.stream()
-                .filter(a -> a.getName() == productName)
+                .filter(a -> a.getName().equalsIgnoreCase(productName))
                 .collect(Collectors.toList());
 
         if (!response.isEmpty())
             return response;
         else
-            throw new ProductNameNotFoundException("El producto ingresado no existe");
+            throw new ProductNameNotFoundException("El producto o la combinación ingresada no existe");
     }
 
     @Override
@@ -91,13 +92,13 @@ public class ArticulosServiceImpl implements ArticulosService {
             return articulos;
 
         List<ArticuloDTO> response = articulos.stream()
-                .filter(a -> a.getBrand() == brand)
+                .filter(a -> a.getBrand().equalsIgnoreCase(brand))
                 .collect(Collectors.toList());
 
         if (!response.isEmpty())
             return response;
         else
-            throw new BrandNotFoundException("La marca ingresada no existe");
+            throw new BrandNotFoundException("La marca o la combinación ingresada no existe");
     }
 
     @Override
