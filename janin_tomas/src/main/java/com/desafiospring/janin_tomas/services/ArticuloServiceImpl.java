@@ -2,26 +2,24 @@ package com.desafiospring.janin_tomas.services;
 
 import com.desafiospring.janin_tomas.dtos.ArticuloDTO;
 import com.desafiospring.janin_tomas.exceptions.*;
-import com.desafiospring.janin_tomas.repositories.ArticulosRepository;
+import com.desafiospring.janin_tomas.repositories.ArticuloRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
-public class ArticulosServiceImpl implements ArticulosService {
+public class ArticuloServiceImpl implements ArticuloService {
     @Autowired
-    private ArticulosRepository articulosRepository;
+    private ArticuloRepository articuloRepository;
 
     @Override
-    public List<ArticuloDTO> findArticuloByFilters(String category, String shipping, String productName, String brand) throws MaxFiltersException, CategoryNotFoundException, ShippingNotFoundException, InvalidShippingException, ProductNameNotFoundException, BrandNotFoundException {
+    public List<ArticuloDTO> findArticuloByFilters(Long productId, String category, String shipping, String productName, String brand) throws MaxFiltersException, ProductIdNotFoundException, CategoryNotFoundException, ShippingNotFoundException, InvalidShippingException, ProductNameNotFoundException, BrandNotFoundException {
         if (countFiltros(category, shipping, productName, brand) <= 2) {
-            List<ArticuloDTO> articulos = articulosRepository.findArticulos();
+            List<ArticuloDTO> articulos = articuloRepository.findArticulos();
 
+            articulos = findArticuloByProductId(articulos, productId);
             articulos = findArticuloByCategory(articulos, category);
             articulos = findArticuloByShipping(articulos, shipping);
             articulos = findArticuloByProductName(articulos, productName);
@@ -32,6 +30,20 @@ public class ArticulosServiceImpl implements ArticulosService {
         else {
             throw new MaxFiltersException("No puede enviar más de dos filtros a la vez");
         }
+    }
+
+    public List<ArticuloDTO> findArticuloByProductId(List<ArticuloDTO> articulos, Long productId) throws ProductIdNotFoundException {
+        if (productId == null)
+            return articulos;
+
+        List<ArticuloDTO> response = articulos.stream()
+                .filter(a -> a.getProductId() == productId)
+                .collect(Collectors.toList());
+
+        if (!response.isEmpty())
+            return response;
+        else
+            throw new ProductIdNotFoundException("El productId o la combinación ingresada no existe");
     }
 
     @Override

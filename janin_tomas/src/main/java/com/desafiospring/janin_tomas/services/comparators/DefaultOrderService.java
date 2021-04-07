@@ -10,7 +10,7 @@ public class DefaultOrderService extends SorterService {
     private Comparator<ArticuloDTO> c = new Comparator<ArticuloDTO>() {
         @Override
         public int compare(ArticuloDTO o1, ArticuloDTO o2) {
-            return (int)(o1.getProductID() - o2.getProductID());
+            return (int)(o1.getProductId() - o2.getProductId());
         }
     };
 

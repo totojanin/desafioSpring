@@ -9,11 +9,10 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
 @Data
-public class ArticulosRepositoryImpl implements ArticulosRepository {
+public class ArticuloRepositoryImpl implements ArticuloRepository {
     private List<ArticuloDTO> articulos;
 
     @Override
