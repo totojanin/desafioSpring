@@ -6,6 +6,7 @@ import com.desafiospring.janin_tomas.repositories.ArticuloRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,7 +16,7 @@ public class ArticuloServiceImpl implements ArticuloService {
     private ArticuloRepository articuloRepository;
 
     @Override
-    public List<ArticuloDTO> findArticuloByFilters(Long productId, String category, String shipping, String productName, String brand) throws MaxFiltersException, ProductIdNotFoundException, CategoryNotFoundException, ShippingNotFoundException, InvalidShippingException, ProductNameNotFoundException, BrandNotFoundException {
+    public List<ArticuloDTO> findArticuloByFilters(Long productId, String category, String shipping, String productName, String brand) throws MaxFiltersException, ProductIdNotFoundException, CategoryNotFoundException, ShippingNotFoundException, InvalidShippingException, ProductNameNotFoundException, BrandNotFoundException, IOException {
         if (countFiltros(category, shipping, productName, brand) <= 2) {
             List<ArticuloDTO> articulos = articuloRepository.findArticulos();
 
@@ -25,7 +26,7 @@ public class ArticuloServiceImpl implements ArticuloService {
             articulos = findArticuloByProductName(articulos, productName);
             articulos = findArticuloByBrand(articulos, brand);
 
-            return articulos.stream().collect(Collectors.toList());
+            return articulos;
         }
         else {
             throw new MaxFiltersException("No puede enviar más de dos filtros a la vez");
@@ -43,7 +44,7 @@ public class ArticuloServiceImpl implements ArticuloService {
         if (!response.isEmpty())
             return response;
         else
-            throw new ProductIdNotFoundException("El productId o la combinación ingresada no existe");
+            throw new ProductIdNotFoundException("El productId o la combinación de datos ingresada no existe");
     }
 
     @Override
@@ -58,7 +59,7 @@ public class ArticuloServiceImpl implements ArticuloService {
         if (!response.isEmpty())
             return response;
         else
-            throw new CategoryNotFoundException("La categoría o la combinación ingresada no existe");
+            throw new CategoryNotFoundException("La categoría o la combinación de datos ingresada no existe");
     }
 
     @Override
@@ -95,7 +96,7 @@ public class ArticuloServiceImpl implements ArticuloService {
         if (!response.isEmpty())
             return response;
         else
-            throw new ProductNameNotFoundException("El producto o la combinación ingresada no existe");
+            throw new ProductNameNotFoundException("El producto o la combinación de datos ingresada no existe");
     }
 
     @Override
@@ -110,7 +111,21 @@ public class ArticuloServiceImpl implements ArticuloService {
         if (!response.isEmpty())
             return response;
         else
-            throw new BrandNotFoundException("La marca o la combinación ingresada no existe");
+            throw new BrandNotFoundException("La marca o la combinación de datos ingresada no existe");
+    }
+
+    @Override
+    public List<ArticuloDTO> findArticuloByProductIdNameBrand(Long productId, String name, String brand) throws ProductIdNotFoundException, ProductNameNotFoundException, BrandNotFoundException, IOException {
+        List<ArticuloDTO> articulos = articuloRepository.findArticulos();
+
+        articulos = findArticuloByProductId(articulos, productId);
+        articulos = findArticuloByProductName(articulos, name);
+        articulos = findArticuloByBrand(articulos, brand);
+
+        if (!articulos.isEmpty())
+            return articulos;
+        else
+            throw new ProductIdNotFoundException("La combinación de datos ingresada no existe");
     }
 
     @Override

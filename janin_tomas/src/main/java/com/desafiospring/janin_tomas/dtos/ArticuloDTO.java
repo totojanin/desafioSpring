@@ -15,5 +15,5 @@ public class ArticuloDTO {
     private double price;
     private int quantity;
     private boolean freeShipping;
-    private int prestige;
+    private String prestige;
 }

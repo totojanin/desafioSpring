@@ -10,7 +10,8 @@ public class PrestigeDescService extends SorterService {
     private Comparator<ArticuloDTO> c = new Comparator<ArticuloDTO>() {
         @Override
         public int compare(ArticuloDTO o1, ArticuloDTO o2) {
-            return o2.getPrestige() - o1.getPrestige();
+
+            return o2.getPrestige().length() - o1.getPrestige().length();
         }
     };
 
