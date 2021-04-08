@@ -7,6 +7,7 @@ import com.desafiospring.janin_tomas.exceptions.DNINotFoundException;
 import com.desafiospring.janin_tomas.exceptions.ExistingClientException;
 import com.desafiospring.janin_tomas.exceptions.MissingClientDataException;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -28,13 +29,13 @@ public class ClienteRepositoryImpl implements ClienteRepository {
 
     @Override
     public boolean addCliente(ClienteDTO cliente) throws ExistingClientException, MissingClientDataException {
-        if (cliente.getNombre().isEmpty() || cliente.getNombre() == null)
+        if (StringUtils.isBlank(cliente.getNombre()))
             throw new MissingClientDataException("Debe completar el nombre del cliente");
 
-        if (cliente.getDni().isEmpty() || cliente.getDni() == null)
+        if (StringUtils.isBlank(cliente.getDni()))
             throw new MissingClientDataException("Debe completar el DNI del cliente");
 
-        if (cliente.getProvincia().isEmpty() || cliente.getProvincia() == null)
+        if (StringUtils.isBlank(cliente.getProvincia()))
             throw new MissingClientDataException("Debe completar la provincia del cliente");
 
         Optional<ClienteDTO> c = clientes.stream()
@@ -78,7 +79,7 @@ public class ClienteRepositoryImpl implements ClienteRepository {
         if (carritos.containsKey(dni))
             return carritos.get(dni);
         else
-            throw new DNINotFoundException("No se encontró ninguna persona con el DNI ingresado");
+            throw new DNINotFoundException("No se encontró un carrito para el DNI ingresado");
     }
 
     @Override
