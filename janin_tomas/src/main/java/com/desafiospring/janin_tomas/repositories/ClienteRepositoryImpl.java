@@ -83,14 +83,30 @@ public class ClienteRepositoryImpl implements ClienteRepository {
 
     @Override
     public CarritoDTO addToCart(List<ArticuloPurchaseDTO> articulos, double total, String dni) {
-        try {
-            for (ArticuloPurchaseDTO a : articulos) {
-                articuloRepository.descontarStock(a);
-            }
+        for (ArticuloPurchaseDTO a : articulos) {
+            articuloRepository.descontarStock(a);
+        }
 
+        return createOrUpdateCart(articulos, total, dni);
+    }
+
+    private CarritoDTO createOrUpdateCart(List<ArticuloPurchaseDTO> articulos, double total, String dni) {
+        try {
             CarritoDTO carrito = findCartByCliente(dni);
 
-            carrito.getArticulos().addAll(articulos);
+            for (ArticuloPurchaseDTO articulo : articulos) {
+                Optional<ArticuloPurchaseDTO> aux = carrito.getArticulos().stream()
+                        .filter(a -> a.getProductId() == articulo.getProductId())
+                        .findFirst();
+
+                if (aux.isPresent()) {
+                    aux.get().setQuantity(aux.get().getQuantity() + articulo.getQuantity());
+                }
+                else {
+                    carrito.getArticulos().add(articulo);
+                }
+            }
+
             carrito.setTotal(carrito.getTotal() + total);
 
             carritos.put(dni, carrito);
