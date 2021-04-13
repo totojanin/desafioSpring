@@ -16,7 +16,7 @@ public class ArticuloServiceImpl implements ArticuloService {
     private ArticuloRepository articuloRepository;
 
     @Override
-    public List<ArticuloDTO> findArticuloByFilters(Long productId, String category, String shipping, String productName, String brand) throws MaxFiltersException, ProductIdNotFoundException, CategoryNotFoundException, ShippingNotFoundException, InvalidShippingException, ProductNameNotFoundException, BrandNotFoundException, IOException {
+    public List<ArticuloDTO> findArticuloByFilters(Long productId, String category, String shipping, String productName, String brand, Integer order) throws MaxFiltersException, ProductIdNotFoundException, CategoryNotFoundException, ShippingNotFoundException, InvalidShippingException, ProductNameNotFoundException, BrandNotFoundException, IOException {
         if (countFiltros(category, shipping, productName, brand) <= 2) {
             List<ArticuloDTO> articulos = articuloRepository.findArticulos();
 
@@ -25,6 +25,8 @@ public class ArticuloServiceImpl implements ArticuloService {
             articulos = findArticuloByShipping(articulos, shipping);
             articulos = findArticuloByProductName(articulos, productName);
             articulos = findArticuloByBrand(articulos, brand);
+
+            articulos = orderArticuloBy(articulos, order);
 
             return articulos;
         }

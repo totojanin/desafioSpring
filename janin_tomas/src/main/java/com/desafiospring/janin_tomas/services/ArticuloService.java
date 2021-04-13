@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface ArticuloService {
-    List<ArticuloDTO> findArticuloByFilters(Long productId, String category, String shipping, String productName, String brand) throws MaxFiltersException, ProductIdNotFoundException, CategoryNotFoundException, ShippingNotFoundException, InvalidShippingException, ProductNameNotFoundException, BrandNotFoundException, IOException;
+    List<ArticuloDTO> findArticuloByFilters(Long productId, String category, String shipping, String productName, String brand, Integer order) throws MaxFiltersException, ProductIdNotFoundException, CategoryNotFoundException, ShippingNotFoundException, InvalidShippingException, ProductNameNotFoundException, BrandNotFoundException, IOException;
     List<ArticuloDTO> findArticuloByProductId(List<ArticuloDTO> articulos, Long productId) throws ProductIdNotFoundException;
     List<ArticuloDTO> findArticuloByCategory(List<ArticuloDTO> articulos, String category) throws CategoryNotFoundException;
     List<ArticuloDTO> findArticuloByShipping(List<ArticuloDTO> articulos, String shipping) throws ShippingNotFoundException, InvalidShippingException;

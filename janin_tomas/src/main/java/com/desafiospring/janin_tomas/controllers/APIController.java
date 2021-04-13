@@ -28,9 +28,7 @@ public class APIController {
 
     @GetMapping("/articles")
     public ResponseEntity<List<ArticuloDTO>> articles(@RequestParam(value = "productId", required = false) Long productId, @RequestParam(value = "category", required = false) String category, @RequestParam(value = "freeShipping", required = false) String freeShipping, @RequestParam(value = "productName", required = false) String productName, @RequestParam(value = "brand", required = false) String brand, @RequestParam(value = "order", required = false) Integer order) throws MaxFiltersException, ProductIdNotFoundException, CategoryNotFoundException, ShippingNotFoundException, InvalidShippingException, ProductNameNotFoundException, BrandNotFoundException, IOException {
-        List<ArticuloDTO> articulos = articuloService.findArticuloByFilters(productId, category, freeShipping, productName, brand);
-
-        articulos = articuloService.orderArticuloBy(articulos, order);
+        List<ArticuloDTO> articulos = articuloService.findArticuloByFilters(productId, category, freeShipping, productName, brand, order);
 
         return new ResponseEntity<>(articulos, HttpStatus.OK);
     }
